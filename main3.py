@@ -54,7 +54,7 @@ def main():
         (b_min, g_max, r_max, '33', '43'),
         (b_max, g_min, r_min, '34', '44'),
         (b_max, g_min, r_max, '35', '45'),
-        (b_max, g_max, r_min, '36', '47'),
+        (b_max, g_max, r_min, '36', '46'),
         (b_max, g_max, r_max, '37', '47'),
 
         # (b_min, g_min, r_max, '1;31', '1;41'),
