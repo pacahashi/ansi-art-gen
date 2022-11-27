@@ -4,6 +4,7 @@ from os.path import dirname, join
 import cv2
 import numpy as np
 import scipy.spatial as sp
+import sys
 
 
 def main():
@@ -30,7 +31,12 @@ def main():
         pass
 
     # 読み込み
-    img = cv2.imread(join(base_dir, "sample2.png"))
+    if len(sys.argv) != 2:
+        raise Exception('error: file name not specified')
+    input_file = sys.argv[1]
+    img = cv2.imread(join(base_dir, input_file))
+
+    print(f'input: {input_file}')
 
     # カラーパレットを調整
     b, g, r = cv2.split(img)
@@ -44,7 +50,8 @@ def main():
     r_mid = np.median(r)
     r_max = np.amax(r)
 
-    print(f'{b_min=}, {b_mid=}, {b_max=}\n{g_min=}, {g_mid=}, {g_max=}\n{r_min=}, {r_mid=}, {r_max=}')
+    print('colors:')
+    print(f'\t{b_min=}, {b_mid=}, {b_max=}\n\t{g_min=}, {g_mid=}, {g_max=}\n\t{r_min=}, {r_mid=}, {r_max=}')
 
     main_colors = [
         (b_min, g_min, r_min, '30', '40'),
@@ -121,9 +128,11 @@ def main():
     h, w, _ = img.shape
     img = cv2.resize(img, (int(w * zoom), int(h * zoom)))
     img = cv2.resize(img, (columns, int(columns*y_adjust)))
+    print(f'original size: {h=}, {w=}')
 
     # 変換後の各ドットに対して以下を決定する
     h, w, _ = img.shape
+    print(f'resized: {h=}, {w=}')
     chars = []
     current_main = -1
     current_sub = -1
@@ -152,10 +161,13 @@ def main():
 
         # chars.append(LB)
 
-    with open(join(dist_dir, 'out.ans'), 'wb') as f:
+    ans_file = join(dist_dir, 'out.ans')
+    with open(ans_file, 'wb') as f:
         f.write(''.join(chars).encode('latin-1'))
 
     cv2.imwrite(join(dist_dir, "out.png"), img)
+
+    print(f'done: {ans_file}')
 
 
 main()
